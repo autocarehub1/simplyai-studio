@@ -121,20 +121,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    await Promise.all([
-      sendEmail({
-        to: { email, name: `${firstName} ${lastName}` },
-        subject: "Book your free consultation — SimplyAI Studio",
-        html: clientEmail({ firstName, business, service }),
-      }),
-      sendEmail({
-        to: { email: OWNER_EMAIL, name: "Emmanuel Eleruja" },
-        subject: `New inquiry: ${firstName} ${lastName} · ${business}`,
-        html: ownerEmail({ firstName, lastName, phone, email, business, industry, service, message }),
-      }),
-    ]);
+    // Client email is the essential one — gate success on it
+    await sendEmail({
+      to: { email, name: `${firstName} ${lastName}` },
+      subject: "Book your free consultation — SimplyAI Studio",
+      html: clientEmail({ firstName, business, service }),
+    });
 
-    // Push to GHL pipeline — non-blocking so email success is never gated on GHL
+    // Owner notification and GHL are fire-and-forget — never block the client response
+    sendEmail({
+      to: { email: OWNER_EMAIL, name: "Emmanuel Eleruja" },
+      subject: `New inquiry: ${firstName} ${lastName} · ${business}`,
+      html: ownerEmail({ firstName, lastName, phone, email, business, industry, service, message }),
+    }).catch((err: unknown) => console.error("[owner-email]", err));
+
     pushToGHL({ firstName, lastName, email, phone, business, industry, service, message })
       .catch((err: unknown) => console.error("[GHL]", err));
 

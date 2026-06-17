@@ -111,9 +111,13 @@ export default function ContactForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      if (!res.ok) throw new Error("server error");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
       setSubmitted(true);
-    } catch {
+    } catch (err) {
+      console.error("[contact form]", err);
       setApiError("Something went wrong. Please try again or call us at (432) 202-2150.");
     } finally {
       setSubmitting(false);
