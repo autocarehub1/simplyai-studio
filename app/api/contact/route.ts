@@ -100,6 +100,16 @@ async function pushToGHL(data: {
       source: "Website Contact Form",
     }),
   });
+
+  // 3 — Fire n8n instant follow-up workflow
+  const n8nUrl = process.env.N8N_WEBHOOK_NEW_LEAD;
+  if (n8nUrl) {
+    await fetch(n8nUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ contactId, ...data }),
+    }).catch((err: unknown) => console.error("[n8n]", err));
+  }
 }
 
 export async function POST(req: NextRequest) {
