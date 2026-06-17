@@ -34,7 +34,7 @@ async function sendEmail(opts: {
   }
 }
 
-async function ghlWebhook(data: {
+async function pushToGHL(data: {
   firstName: string;
   lastName: string;
   email: string;
@@ -44,19 +44,62 @@ async function ghlWebhook(data: {
   service: string;
   message: string;
 }): Promise<void> {
-  const url = process.env.GHL_WEBHOOK_URL;
-  if (!url) return;
+  const apiKey = process.env.GHL_API_KEY;
+  const locationId = process.env.GHL_LOCATION_ID;
+  const pipelineId = process.env.GHL_PIPELINE_ID;
+  const stageId = process.env.GHL_STAGE_ID;
+  if (!apiKey || !locationId) return;
 
-  const res = await fetch(url, {
+  const headers = {
+    Authorization: `Bearer ${apiKey}`,
+    Version: "2021-07-28",
+    "Content-Type": "application/json",
+  };
+
+  // 1 — Create or update contact
+  const contactRes = await fetch("https://services.leadconnectorhq.com/contacts/upsert", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    headers,
+    body: JSON.stringify({
+      locationId,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      phone: data.phone,
+      tags: ["website-lead", data.service.toLowerCase().replace(/\s+/g, "-")],
+      customFields: [
+        { key: "business_name", field_value: data.business },
+        { key: "industry", field_value: data.industry },
+        { key: "service_interest", field_value: data.service },
+        { key: "lead_message", field_value: data.message },
+      ],
+      source: "SimplyAI Studio Website",
+    }),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`GHL webhook ${res.status}: ${text}`);
+  if (!contactRes.ok) {
+    const text = await contactRes.text();
+    throw new Error(`GHL contact upsert ${contactRes.status}: ${text}`);
   }
+
+  const { contact } = await contactRes.json();
+  const contactId = contact?.id;
+  if (!contactId || !pipelineId || !stageId) return;
+
+  // 2 — Add to pipeline as an opportunity
+  await fetch("https://services.leadconnectorhq.com/opportunities/", {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      locationId,
+      pipelineId,
+      pipelineStageId: stageId,
+      contactId,
+      name: `${data.firstName} ${data.lastName} — ${data.business}`,
+      status: "open",
+      source: "Website Contact Form",
+    }),
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -82,7 +125,7 @@ export async function POST(req: NextRequest) {
     ]);
 
     // Push to GHL pipeline — non-blocking so email success is never gated on GHL
-    ghlWebhook({ firstName, lastName, email, phone, business, industry, service, message })
+    pushToGHL({ firstName, lastName, email, phone, business, industry, service, message })
       .catch((err: unknown) => console.error("[GHL]", err));
 
     return NextResponse.json({ success: true });

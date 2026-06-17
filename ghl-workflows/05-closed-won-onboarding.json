@@ -1,0 +1,186 @@
+{
+  "name": "05 — Closed Won Onboarding + Review Request",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "closed-won",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook",
+      "name": "Webhook — Closed Won",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "notes": "Trigger this when opportunity stage is moved to Closed Won in GHL"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Welcome aboard, {{ $json.firstName }}! 🎉 We're so excited to build {{ $json.business }}'s new website. Emmanuel will send your project kickoff email within the hour with all next steps. This is going to be great!" }
+          ]
+        }
+      },
+      "id": "welcome-sms",
+      "name": "Welcome SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 160]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "Email" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "subject", "value": "🚀 Project Kickoff — {{ $json.business }} × SimplyAI Studio" },
+            { "name": "html", "value": "<p>Hi {{ $json.firstName }},</p><p>Welcome to SimplyAI Studio! We're thrilled to be building <strong>{{ $json.business }}</strong>'s new website.</p><h3>Your Next Steps:</h3><ol><li><strong>Complete the onboarding form</strong> — we'll send this separately with questions about your brand, content, and goals.</li><li><strong>Send us any existing assets</strong> — logos, photos, copy, or anything you'd like us to use.</li><li><strong>Confirm your domain</strong> — let us know if you have one or need help getting one.</li></ol><p>Our target delivery is <strong>{{ $json.deliveryDays }} business days</strong> from receipt of your onboarding form.</p><p>Questions? Reply here or text me directly at (432) 202-2150.</p><p>Let's build something great!</p><p>Emmanuel<br>SimplyAI Studio</p>" }
+          ]
+        }
+      },
+      "id": "kickoff-email",
+      "name": "Kickoff Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 360]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/opportunities/{{ $json.opportunityId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "pipelineStageId", "value": "57c6a3d8-c1a8-4dbe-b6a2-ce7f3e9d0095" },
+            { "name": "status", "value": "won" }
+          ]
+        }
+      },
+      "id": "mark-won",
+      "name": "Mark Opportunity Won",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 540]
+    },
+    {
+      "parameters": { "amount": 7, "unit": "days" },
+      "id": "wait-delivery",
+      "name": "Wait — Project Delivery Window",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Hi {{ $json.firstName }}! Hope you're loving the new site for {{ $json.business }} 🎉 If you have a moment, an honest Google review would mean the world to us and help other local businesses find us: https://g.page/r/simplyaistudio/review — No pressure, but we'd be so grateful! — Emmanuel" }
+          ]
+        }
+      },
+      "id": "review-request",
+      "name": "Review Request SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [960, 300]
+    },
+    {
+      "parameters": { "amount": 3, "unit": "days" },
+      "id": "wait-review",
+      "name": "Wait 3 More Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1160, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Hey {{ $json.firstName }}! Quick one — do you know any other local businesses that need a website? We offer a referral bonus for every client you send our way. Just reply and I'll share the details! — Emmanuel, SimplyAI Studio" }
+          ]
+        }
+      },
+      "id": "referral-sms",
+      "name": "Referral Request SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1360, 300]
+    }
+  ],
+  "connections": {
+    "Webhook — Closed Won": {
+      "main": [[
+        { "node": "Welcome SMS", "type": "main", "index": 0 },
+        { "node": "Kickoff Email", "type": "main", "index": 0 },
+        { "node": "Mark Opportunity Won", "type": "main", "index": 0 },
+        { "node": "Wait — Project Delivery Window", "type": "main", "index": 0 }
+      ]]
+    },
+    "Wait — Project Delivery Window": { "main": [[{ "node": "Review Request SMS", "type": "main", "index": 0 }]] },
+    "Review Request SMS": { "main": [[{ "node": "Wait 3 More Days", "type": "main", "index": 0 }]] },
+    "Wait 3 More Days": { "main": [[{ "node": "Referral Request SMS", "type": "main", "index": 0 }]] }
+  },
+  "_meta": {
+    "description": "Triggers on Closed Won. Sends welcome SMS + kickoff email instantly, marks opportunity won. After delivery window: sends review request SMS, then referral ask.",
+    "ghl_setup": {
+      "workflow_name": "Closed Won — Onboarding & Review",
+      "trigger": "Opportunity Stage Changed to 'Closed Won'",
+      "actions": [
+        { "immediate": "Send welcome SMS" },
+        { "immediate": "Send kickoff email" },
+        { "immediate": "Mark opportunity as Won" },
+        { "wait": "7 days", "action": "Send Google review request SMS" },
+        { "wait": "10 days", "condition": "No review left", "action": "Send referral ask SMS" }
+      ]
+    }
+  }
+}

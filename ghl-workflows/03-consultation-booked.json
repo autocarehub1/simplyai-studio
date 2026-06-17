@@ -1,0 +1,163 @@
+{
+  "name": "03 — Consultation Booked Reminders",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "consultation-booked",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook",
+      "name": "Webhook — Calendly Booking",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "notes": "Connect Calendly → n8n via Calendly webhook or Zapier/Make trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Confirmed! ✅ Your free consultation with SimplyAI Studio is booked for {{ $json.appointmentTime }}. I'm looking forward to it, {{ $json.firstName }}! If you need to reschedule: https://calendly.com/emmanuel_eleruja/website-consultation — Emmanuel" }
+          ]
+        }
+      },
+      "id": "confirm-sms",
+      "name": "Confirmation SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 200]
+    },
+    {
+      "parameters": {
+        "amount": 23,
+        "unit": "hours"
+      },
+      "id": "wait-24h",
+      "name": "Wait 23 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Reminder: Your consultation with SimplyAI Studio is TOMORROW at {{ $json.appointmentTime }}. Looking forward to chatting about {{ $json.business }}! 🚀 Need to reschedule? https://calendly.com/emmanuel_eleruja/website-consultation" }
+          ]
+        }
+      },
+      "id": "reminder-24h",
+      "name": "24h Reminder SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [660, 400]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "minutes"
+      },
+      "id": "wait-1h",
+      "name": "Wait Until 1hr Before",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [860, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Starting in 1 hour! ⏰ Your SimplyAI Studio consultation is at {{ $json.appointmentTime }}. See you soon, {{ $json.firstName }}!" }
+          ]
+        }
+      },
+      "id": "reminder-1h",
+      "name": "1hr Reminder SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1060, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/opportunities/{{ $json.opportunityId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "pipelineStageId", "value": "90613578-3670-4884-96a9-029013d45d25" }
+          ]
+        }
+      },
+      "id": "move-stage",
+      "name": "Move to Contacted Stage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 560]
+    }
+  ],
+  "connections": {
+    "Webhook — Calendly Booking": {
+      "main": [[
+        { "node": "Confirmation SMS", "type": "main", "index": 0 },
+        { "node": "Wait 23 Hours", "type": "main", "index": 0 },
+        { "node": "Move to Contacted Stage", "type": "main", "index": 0 }
+      ]]
+    },
+    "Wait 23 Hours": { "main": [[{ "node": "24h Reminder SMS", "type": "main", "index": 0 }]] },
+    "24h Reminder SMS": { "main": [[{ "node": "Wait Until 1hr Before", "type": "main", "index": 0 }]] },
+    "Wait Until 1hr Before": { "main": [[{ "node": "1hr Reminder SMS", "type": "main", "index": 0 }]] }
+  },
+  "_meta": {
+    "description": "Triggers when Calendly booking is made. Sends confirmation SMS, 24h reminder, 1h reminder. Moves lead to Contacted stage in GHL pipeline.",
+    "ghl_setup": {
+      "workflow_name": "Consultation Booked — Reminders",
+      "trigger": "Appointment Status = Booked",
+      "actions": [
+        { "immediate": "Send SMS confirmation" },
+        { "wait": "23 hours", "action": "Send SMS 24h reminder" },
+        { "wait": "1 hour before appointment", "action": "Send SMS 1h reminder" },
+        { "immediate": "Move opportunity to Contacted stage" }
+      ]
+    }
+  }
+}

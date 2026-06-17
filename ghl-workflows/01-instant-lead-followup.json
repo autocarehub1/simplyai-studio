@@ -1,0 +1,127 @@
+{
+  "name": "01 — Instant Lead Follow-up",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook — New Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Version", "value": "2021-07-28" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Hi {{ $json.firstName }}! This is Emmanuel from SimplyAI Studio. Thanks for reaching out about {{ $json.business }} — I'd love to learn more. Are you available for a quick 20-min call this week? Book here: https://calendly.com/emmanuel_eleruja/website-consultation" }
+          ]
+        }
+      },
+      "id": "send-sms",
+      "name": "Send SMS — Instant",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Version", "value": "2021-07-28" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "Email" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "subject", "value": "Welcome to SimplyAI Studio, {{ $json.firstName }}!" },
+            { "name": "html", "value": "<p>Hi {{ $json.firstName }},</p><p>Thanks for getting in touch! We've received your enquiry about <strong>{{ $json.service }}</strong> for <strong>{{ $json.business }}</strong>.</p><p>I'll personally review your details and reach out within a few hours. In the meantime, you can book a free 20-min discovery call instantly here:</p><p><a href='https://calendly.com/emmanuel_eleruja/website-consultation' style='background:#C9922A;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;'>Book My Free Call →</a></p><p>Looking forward to speaking with you!</p><p>Emmanuel<br>SimplyAI Studio<br>(432) 202-2150</p>" }
+          ]
+        }
+      },
+      "id": "send-email",
+      "name": "Send Email — Welcome",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/contacts/{{ $json.contactId }}/tasks",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Version", "value": "2021-07-28" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "title", "value": "Call {{ $json.firstName }} {{ $json.lastName }} — {{ $json.business }}" },
+            { "name": "body", "value": "New website lead. Service interest: {{ $json.service }}. Industry: {{ $json.industry }}. Phone: {{ $json.phone }}" },
+            { "name": "dueDate", "value": "={{ new Date(Date.now() + 3600000).toISOString() }}" },
+            { "name": "completed", "value": false }
+          ]
+        }
+      },
+      "id": "create-task",
+      "name": "Create Task — Call in 1hr",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [500, 600]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"received\": true }"
+      },
+      "id": "respond",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [760, 300]
+    }
+  ],
+  "connections": {
+    "Webhook — New Lead": {
+      "main": [[
+        { "node": "Send SMS — Instant", "type": "main", "index": 0 },
+        { "node": "Send Email — Welcome", "type": "main", "index": 0 },
+        { "node": "Create Task — Call in 1hr", "type": "main", "index": 0 }
+      ]]
+    },
+    "Send SMS — Instant": { "main": [[{ "node": "Respond OK", "type": "main", "index": 0 }]] }
+  },
+  "_meta": {
+    "description": "Triggers on new lead. Sends instant SMS + welcome email + creates 1hr call task in GHL.",
+    "ghl_setup": "In GHL Workflows: Trigger = Contact Created + Tag 'website-lead'. Action = HTTP Request to your n8n webhook URL."
+  }
+}

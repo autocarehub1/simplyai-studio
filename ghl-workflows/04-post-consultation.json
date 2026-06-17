@@ -1,0 +1,158 @@
+{
+  "name": "04 — Post-Consultation Follow-up",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "consultation-completed",
+        "responseMode": "responseNode"
+      },
+      "id": "webhook",
+      "name": "Webhook — Appointment Completed",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "Email" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "subject", "value": "Your SimplyAI Studio proposal — {{ $json.business }}" },
+            { "name": "html", "value": "<p>Hi {{ $json.firstName }},</p><p>Great speaking with you today! As discussed, here's a summary of what we'd build for <strong>{{ $json.business }}</strong>:</p><ul><li>{{ $json.proposedPackage }}</li><li>Delivered in {{ $json.deliveryDays }} days</li><li>Investment: {{ $json.proposedPrice }}</li></ul><p>To get started, simply reply YES or book a follow-up here: <a href='https://calendly.com/emmanuel_eleruja/website-consultation'>https://calendly.com/emmanuel_eleruja/website-consultation</a></p><p>I'll hold your spot for 48 hours.</p><p>Emmanuel<br>SimplyAI Studio</p>" }
+          ]
+        }
+      },
+      "id": "send-proposal",
+      "name": "Send Proposal Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/opportunities/{{ $json.opportunityId }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "pipelineStageId", "value": "cd1acb5b-6a44-4a50-bcf0-ef2bad8ade38" }
+          ]
+        }
+      },
+      "id": "move-proposal",
+      "name": "Move to Proposal Sent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [480, 400]
+    },
+    {
+      "parameters": { "amount": 2, "unit": "days" },
+      "id": "wait-2d",
+      "name": "Wait 2 Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Hi {{ $json.firstName }}, just checking if you had a chance to review the proposal I sent for {{ $json.business }}. Any questions at all? Happy to jump on a quick call — Emmanuel, SimplyAI Studio" }
+          ]
+        }
+      },
+      "id": "day2-sms",
+      "name": "Day 2 — Follow-up SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 200]
+    },
+    {
+      "parameters": { "amount": 3, "unit": "days" },
+      "id": "wait-5d",
+      "name": "Wait 3 More Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1100, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.contactId }}" },
+            { "name": "message", "value": "Final follow-up, {{ $json.firstName }}! I'm reserving a project slot that starts next week — would love to give it to {{ $json.business }}. Reply YES to confirm or let me know if timing isn't right. No hard feelings either way! — Emmanuel" }
+          ]
+        }
+      },
+      "id": "day5-sms",
+      "name": "Day 5 — Final SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1300, 200]
+    }
+  ],
+  "connections": {
+    "Webhook — Appointment Completed": {
+      "main": [[
+        { "node": "Send Proposal Email", "type": "main", "index": 0 },
+        { "node": "Move to Proposal Sent", "type": "main", "index": 0 }
+      ]]
+    },
+    "Send Proposal Email": { "main": [[{ "node": "Wait 2 Days", "type": "main", "index": 0 }]] },
+    "Wait 2 Days": { "main": [[{ "node": "Day 2 — Follow-up SMS", "type": "main", "index": 0 }]] },
+    "Day 2 — Follow-up SMS": { "main": [[{ "node": "Wait 3 More Days", "type": "main", "index": 0 }]] },
+    "Wait 3 More Days": { "main": [[{ "node": "Day 5 — Final SMS", "type": "main", "index": 0 }]] }
+  },
+  "_meta": {
+    "description": "Triggers after consultation is marked complete. Sends proposal email immediately, moves pipeline stage, then Day 2 SMS and Day 5 final SMS.",
+    "ghl_setup": {
+      "workflow_name": "Post-Consultation Follow-up",
+      "trigger": "Appointment Status = Completed",
+      "actions": [
+        { "immediate": "Send proposal email" },
+        { "immediate": "Move opportunity to Proposal Sent stage" },
+        { "wait": "2 days", "condition": "No reply", "action": "Send Day 2 follow-up SMS" },
+        { "wait": "5 days", "condition": "No reply", "action": "Send Day 5 final SMS" },
+        { "wait": "7 days", "condition": "No reply", "action": "Move to cold / close lost" }
+      ]
+    }
+  }
+}

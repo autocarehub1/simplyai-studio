@@ -1,0 +1,104 @@
+{
+  "name": "02 — No Response Nurture Sequence",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [{ "field": "hours", "hoursInterval": 1 }] }
+      },
+      "id": "schedule",
+      "name": "Schedule — Every Hour",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://services.leadconnectorhq.com/contacts/?locationId={{ $env.GHL_LOCATION_ID }}&tags=website-lead&tags=no-reply-d1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        }
+      },
+      "id": "get-cold-leads",
+      "name": "Get Cold Leads",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [{ "value1": "={{ $json.contacts.length }}", "operation": "larger", "value2": 0 }]
+        }
+      },
+      "id": "has-leads",
+      "name": "Has Cold Leads?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "split",
+      "name": "Split Contacts",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [860, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://services.leadconnectorhq.com/conversations/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "Version", "value": "2021-07-28" }]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "type", "value": "SMS" },
+            { "name": "contactId", "value": "={{ $json.id }}" },
+            { "name": "message", "value": "Hey {{ $json.firstName }}, just checking in! I know things get busy. I'd love to help {{ $json.business }} get online with a professional site. Still interested? Book a quick call: https://calendly.com/emmanuel_eleruja/website-consultation — Emmanuel, SimplyAI Studio" }
+          ]
+        }
+      },
+      "id": "day1-sms",
+      "name": "Day 1 — Follow-up SMS",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1060, 200]
+    }
+  ],
+  "connections": {
+    "Schedule — Every Hour": { "main": [[{ "node": "Get Cold Leads", "type": "main", "index": 0 }]] },
+    "Get Cold Leads": { "main": [[{ "node": "Has Cold Leads?", "type": "main", "index": 0 }]] },
+    "Has Cold Leads?": { "main": [[{ "node": "Split Contacts", "type": "main", "index": 0 }], []] },
+    "Split Contacts": { "main": [[{ "node": "Day 1 — Follow-up SMS", "type": "main", "index": 0 }]] }
+  },
+  "_meta": {
+    "description": "Runs hourly. Finds leads tagged 'website-lead' with no reply after 24h and sends follow-up SMS on Day 1, Day 3, Day 7.",
+    "ghl_setup": {
+      "workflow_name": "No Response Follow-up Sequence",
+      "trigger": "Contact Tag Added = 'website-lead'",
+      "actions": [
+        { "wait": "24 hours", "condition": "No reply received", "action": "Send SMS: Day 1 follow-up" },
+        { "wait": "3 days", "condition": "No reply received", "action": "Send SMS: Day 3 — share portfolio link" },
+        { "wait": "7 days", "condition": "No reply received", "action": "Send SMS: Day 7 — final check-in with special offer" },
+        { "wait": "14 days", "condition": "No reply received", "action": "Add tag 'cold-lead', remove from active sequence" }
+      ],
+      "sms_templates": {
+        "day1": "Hey {{contact.first_name}}, just checking in! I know things get busy. Still interested in a website for {{contact.company_name}}? Book a free call: https://calendly.com/emmanuel_eleruja/website-consultation",
+        "day3": "Hi {{contact.first_name}}! Wanted to share some of our recent work — we just launched sites for a local plumber, a beauty salon, and a med spa. Love to do the same for {{contact.company_name}}. See our work: https://simplyaistudio.com/work",
+        "day7": "Last message from me, {{contact.first_name}} — I want to make this easy. Reply YES and I'll send you a custom quote for {{contact.company_name}} within 24 hours. No obligation. — Emmanuel, SimplyAI Studio"
+      }
+    }
+  }
+}
