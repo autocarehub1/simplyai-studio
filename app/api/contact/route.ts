@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { waitUntil } from "@vercel/functions";
 
 const OWNER_EMAIL = "elerujaemmy@yahoo.com";
 const CALENDLY_URL = "https://calendly.com/emmanuel_eleruja/website-consultation";
@@ -128,15 +129,19 @@ export async function POST(req: NextRequest) {
       html: clientEmail({ firstName, business, service }),
     });
 
-    // Owner notification and GHL are fire-and-forget — never block the client response
-    sendEmail({
-      to: { email: OWNER_EMAIL, name: "Emmanuel Eleruja" },
-      subject: `New inquiry: ${firstName} ${lastName} · ${business}`,
-      html: ownerEmail({ firstName, lastName, phone, email, business, industry, service, message }),
-    }).catch((err: unknown) => console.error("[owner-email]", err));
+    // Owner notification and GHL run after response — waitUntil keeps Vercel alive for them
+    waitUntil(
+      sendEmail({
+        to: { email: OWNER_EMAIL, name: "Emmanuel Eleruja" },
+        subject: `New inquiry: ${firstName} ${lastName} · ${business}`,
+        html: ownerEmail({ firstName, lastName, phone, email, business, industry, service, message }),
+      }).catch((err: unknown) => console.error("[owner-email]", err))
+    );
 
-    pushToGHL({ firstName, lastName, email, phone, business, industry, service, message })
-      .catch((err: unknown) => console.error("[GHL]", err));
+    waitUntil(
+      pushToGHL({ firstName, lastName, email, phone, business, industry, service, message })
+        .catch((err: unknown) => console.error("[GHL]", err))
+    );
 
     return NextResponse.json({ success: true });
   } catch (err) {
