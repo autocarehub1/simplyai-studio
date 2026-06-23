@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 
-const OWNER_EMAIL = "elerujaemmy@yahoo.com";
+const OWNER_EMAIL = "info@simplyaistudio.com";
 const CALENDLY_URL = "https://calendly.com/emmanuel_eleruja/website-consultation";
 const BREVO_API = "https://api.brevo.com/v3/smtp/email";
 
@@ -206,7 +206,7 @@ function clientEmail({
     <div style="background:#F4F5F7;padding:18px 36px;text-align:center;">
       <p style="margin:0;font-size:12px;color:#9AA0B0;">
         SimplyAI Studio · San Antonio, Texas ·
-        <a href="mailto:elerujaemmy@yahoo.com" style="color:#C9922A;text-decoration:none;">elerujaemmy@yahoo.com</a>
+        <a href="mailto:info@simplyaistudio.com" style="color:#C9922A;text-decoration:none;">info@simplyaistudio.com</a>
       </p>
     </div>
   </div>
