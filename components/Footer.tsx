@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 
 const navLinks = [
@@ -22,8 +23,8 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-10 border-b" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
           {/* Brand */}
           <div>
-            <div className="font-serif text-xl font-bold text-white mb-3">
-              Simply<span style={{ color: "#E8B84B" }}>AI</span> Studio
+            <div className="mb-3">
+              <Image src="/logo.png" alt="SimplyAI Studio" width={140} height={56} className="h-10 w-auto" />
             </div>
             <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
               Intelligent builds for ambitious businesses. Fast, beautiful websites and AI-powered automation for local businesses in San Antonio.
