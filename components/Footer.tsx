@@ -24,7 +24,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <div className="mb-3">
-              <Image src="/logo.png" alt="SimplyAI Studio" width={140} height={56} className="h-10 w-auto" />
+              <Image src="/logo.png" alt="SimplyAI Studio" width={180} height={72} className="h-16 w-auto" />
             </div>
             <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
               Intelligent builds for ambitious businesses. Fast, beautiful websites and AI-powered automation for local businesses in San Antonio.
