@@ -118,7 +118,7 @@ export default function ContactForm() {
       setSubmitted(true);
     } catch (err) {
       console.error("[contact form]", err);
-      setApiError("Something went wrong. Please try again or call us at (432) 202-2150.");
+      setApiError("Something went wrong. Please try again or call us at (210) 978-6160.");
     } finally {
       setSubmitting(false);
     }
@@ -149,7 +149,7 @@ export default function ContactForm() {
           your free 20-minute discovery call.
         </p>
         <p className="text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
-          Didn&apos;t receive it? Check your spam folder or call us at (432) 202-2150.
+          Didn&apos;t receive it? Check your spam folder or call us at (210) 978-6160.
         </p>
       </div>
     );

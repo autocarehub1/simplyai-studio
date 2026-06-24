@@ -178,10 +178,10 @@ export default function HomePage() {
               Get a Free Quote →
             </Link>
             <Link
-              href="tel:4322022150"
+              href="tel:2109786160"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-medium text-sm border border-white/20 text-white/80 hover:border-gold-light hover:text-gold-light transition-all duration-200"
             >
-              📞 (432) 202-2150
+              📞 (210) 978-6160
             </Link>
           </div>
         </div>

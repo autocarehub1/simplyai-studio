@@ -31,11 +31,11 @@ export default function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="tel:4322022150"
+                href="tel:2109786160"
                 className="text-sm font-medium transition-colors duration-200"
                 style={{ color: "#E8B84B" }}
               >
-                (432) 202-2150
+                (210) 978-6160
               </a>
             </div>
           </div>
@@ -69,20 +69,20 @@ export default function Footer() {
             </div>
             <ul className="flex flex-col gap-2.5 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
               <li>
-                <a href="mailto:elerujaemmy@yahoo.com" className="transition-colors duration-200 hover:text-gold-light" style={{ color: "rgba(255,255,255,0.55)" }}
+                <a href="mailto:info@simplyaistudio.com" className="transition-colors duration-200 hover:text-gold-light" style={{ color: "rgba(255,255,255,0.55)" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#E8B84B")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
                 >
-                  elerujaemmy@yahoo.com
+                  info@simplyaistudio.com
                 </a>
               </li>
               <li>
-                <a href="tel:4322022150"
+                <a href="tel:2109786160"
                   style={{ color: "rgba(255,255,255,0.55)" }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = "#E8B84B")}
                   onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
                 >
-                  (432) 202-2150
+                  (210) 978-6160
                 </a>
               </li>
               <li>San Antonio, Texas</li>

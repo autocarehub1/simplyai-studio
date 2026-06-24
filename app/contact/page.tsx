@@ -12,8 +12,8 @@ const contactItems = [
   {
     icon: "📞",
     label: "Phone",
-    value: "(432) 202-2150",
-    href: "tel:4322022150",
+    value: "(210) 978-6160",
+    href: "tel:2109786160",
   },
   {
     icon: "✉️",

@@ -199,7 +199,7 @@ function clientEmail({
       <hr style="border:none;border-top:1px solid #E8EAF0;margin:28px 0;" />
       <p style="margin:0;font-size:13px;color:#5A6070;line-height:1.6;">
         Questions? Call us at
-        <a href="tel:4322022150" style="color:#C9922A;text-decoration:none;">(432) 202-2150</a>
+        <a href="tel:2109786160" style="color:#C9922A;text-decoration:none;">(210) 978-6160</a>
         or reply to this email.
       </p>
     </div>
