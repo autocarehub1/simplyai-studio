@@ -118,6 +118,8 @@ export async function POST(req: NextRequest) {
     const { firstName, lastName, phone, email, business, industry, service, message } =
       await req.json();
 
+    console.log("[contact] submission:", { firstName, lastName, email, business, industry, service });
+
     if (!firstName || !lastName || !email || !business || !service) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }

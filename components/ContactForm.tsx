@@ -161,6 +161,7 @@ export default function ContactForm() {
       className="rounded-2xl p-6 md:p-8 flex flex-col gap-5"
       style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
       noValidate
+      autoComplete="off"
     >
       {/* Name */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
