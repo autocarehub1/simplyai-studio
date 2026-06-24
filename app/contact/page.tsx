@@ -18,8 +18,8 @@ const contactItems = [
   {
     icon: "✉️",
     label: "Email",
-    value: "elerujaemmy@yahoo.com",
-    href: "mailto:elerujaemmy@yahoo.com",
+    value: "info@simplyaistudio.com",
+    href: "mailto:info@simplyaistudio.com",
   },
   {
     icon: "📍",
