@@ -26,11 +26,11 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SimplyAI Studio | San Antonio Website Design & AI Automation",
+  title: "SimplyAI Studio | AI Voice Agents for Small Businesses",
   description:
-    "SimplyAI Studio builds fast, beautiful websites and AI-powered automation systems for local businesses in San Antonio, Texas. Starting at $1,800.",
+    "SimplyAI Studio sets up AI voice agents that answer calls, qualify leads, and book appointments 24/7 for small businesses in San Antonio, Texas and beyond.",
   keywords:
-    "website design, San Antonio, AI automation, local business website, web development, GoHighLevel, CRM",
+    "AI voice agent, AI receptionist, voice AI setup, small business, missed calls, appointment booking, San Antonio, AI automation",
 };
 
 export default function RootLayout({

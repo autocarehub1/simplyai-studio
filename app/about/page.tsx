@@ -3,16 +3,16 @@ import Link from "next/link";
 import Hero from "@/components/Hero";
 
 export const metadata: Metadata = {
-  title: "About | SimplyAI Studio — San Antonio Website & Automation Agency",
+  title: "About | SimplyAI Studio — AI Voice Agents for Small Businesses",
   description:
-    "SimplyAI Studio is a San Antonio-based agency helping local businesses grow with professional websites and AI-powered automation. Learn our story.",
+    "SimplyAI Studio is a San Antonio-based studio that sets up AI voice agents for small businesses, so no call or customer goes unanswered. Learn our story.",
 };
 
 const values = [
   {
     icon: "⚡",
     title: "Speed Without Sacrifice",
-    body: "AI tools let us move fast — 5–7 day website delivery is real. But speed never means cutting corners on design or code quality.",
+    body: "AI lets us move fast, from first call to a live agent. But speed never means cutting corners on how your agent sounds or handles your customers.",
   },
   {
     icon: "🤝",
@@ -27,7 +27,7 @@ const values = [
   {
     icon: "🔑",
     title: "You Own Everything",
-    body: "Your site, your domain, your code — 100% yours. We build it, hand it over, and you're never locked into a proprietary platform.",
+    body: "Your phone number, your call data, your scripts — 100% yours. We build it, hand it over, and you're never locked in.",
   },
 ];
 
@@ -54,7 +54,7 @@ export default function AboutPage() {
             <em style={{ fontStyle: "normal", color: "#E8B84B" }}>Keep San Antonio Running</em>
           </>
         }
-        subheadline="We're SimplyAI Studio — a lean, AI-powered web and automation agency built specifically to serve ambitious local businesses."
+        subheadline="We're SimplyAI Studio — a lean studio that sets up AI voice agents for small businesses, so every call gets answered and every lead gets followed up."
       />
 
       {/* OUR STORY */}
@@ -66,17 +66,17 @@ export default function AboutPage() {
                 Why We Exist
               </div>
               <h2 className="font-serif text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-5 text-navy">
-                Big Agency Results. Local Business Prices.
+                A Full-Time Receptionist. Without the Payroll.
               </h2>
               <div className="flex flex-col gap-4 text-sm leading-relaxed text-gray-text">
                 <p>
-                  Most local businesses in San Antonio get stuck choosing between two bad options: an overpriced big agency that treats them like an afterthought, or a cheap freelancer who disappears after launch.
+                  Small business owners miss calls every day — on job sites, with clients, after hours. Every missed call is a customer who calls the next name on Google. Hiring a receptionist or answering service is expensive, and voicemail rarely gets called back.
                 </p>
                 <p>
-                  SimplyAI Studio was built to be the third option. By using AI-powered tools and battle-tested workflows, we cut build time dramatically without cutting quality — passing those savings on to you.
+                  SimplyAI Studio was built to be the third option. We set up an AI voice agent trained on your business that answers calls naturally, books appointments, and hands off to you when it matters.
                 </p>
                 <p>
-                  We&apos;re not just website builders. We build complete growth systems: a high-converting website, automated lead follow-up, appointment booking, and reputation management — all working together from day one.
+                  We do it all for you: writing the script, connecting your calendar and CRM, testing real calls, and going live. We can also add a website and follow-up automation when you&apos;re ready.
                 </p>
               </div>
             </div>
@@ -84,10 +84,10 @@ export default function AboutPage() {
             {/* Stats block */}
             <div className="grid grid-cols-2 gap-4">
               {[
-                { num: "5–7", label: "Day avg. delivery", sub: "For Tier 1 sites" },
-                { num: "$1,800", label: "Starting price", sub: "No setup fees" },
-                { num: "100%", label: "Ownership", sub: "Your code, your domain" },
-                { num: "24hr", label: "Response time", sub: "During your build" },
+                { num: "24/7", label: "Call coverage", sub: "Nights, weekends, holidays" },
+                { num: "Free", label: "Demo call", sub: "Hear it for your business" },
+                { num: "100%", label: "Ownership", sub: "Your number, your data" },
+                { num: "24hr", label: "Response time", sub: "During your setup" },
               ].map((s) => (
                 <div
                   key={s.label}
@@ -147,10 +147,10 @@ export default function AboutPage() {
                 Who We Serve
               </div>
               <h2 className="font-serif text-3xl md:text-4xl font-bold leading-tight tracking-tight text-white mb-5">
-                Built for Every Local Business That Wants to Grow
+                Built for Every Small Business That Lives on the Phone
               </h2>
               <p className="text-sm leading-relaxed mb-6 text-white/55">
-                We work with service businesses, trade contractors, retail shops, professional services, and anyone who needs a website that actually converts — not just looks pretty.
+                We work with service businesses, trade contractors, clinics, salons, professional services, and anyone who loses business when the phone goes unanswered.
               </p>
               <Link
                 href="/contact"
@@ -181,7 +181,7 @@ export default function AboutPage() {
             Ready to Work Together?
           </h2>
           <p className="text-sm leading-relaxed mb-7 text-gray-text">
-            Book your free 20-minute discovery call and walk away with a clear plan for your website and automation — no obligation.
+            Book your free 20-minute discovery call and hear a demo voice agent and walk away with a clear plan — no obligation.
           </p>
           <Link
             href="/contact"

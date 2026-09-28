@@ -5,17 +5,28 @@ import Hero from "@/components/Hero";
 import ServiceCard from "@/components/ServiceCard";
 
 export const metadata: Metadata = {
-  title: "Services & Pricing | SimplyAI Studio — San Antonio",
+  title: "AI Voice Agent Setup & Services | SimplyAI Studio",
   description:
-    "Website design, AI automation, CRM setup, and local SEO for San Antonio businesses. View packages starting at $1,800 with 5–7 day delivery.",
+    "Done-for-you AI voice agent setup for small businesses: 24/7 call answering, lead qualification, and appointment booking. Websites and CRM automation available too.",
 };
+
+const voiceFeatures = [
+  "Custom voice, greeting, and script for your business",
+  "Answers calls 24/7, including nights and weekends",
+  "Books appointments into your calendar",
+  "Qualifies leads and captures details to your CRM",
+  "Text/email summary and transcript after every call",
+  "Warm transfer to you or your team when needed",
+  "Number forwarding setup and live-call testing",
+  "Recorded walkthrough and post-launch support",
+];
 
 const packages = [
   {
     tier: "Tier 1",
     name: "Starter Site",
     best: "Best for new businesses & solo operators",
-    price: "$1,800",
+    price: "$1,799",
     priceNote: "One-time · 50% deposit to start",
     icon: "🌱",
     popular: false,
@@ -34,7 +45,7 @@ const packages = [
     tier: "Tier 2",
     name: "Professional Site",
     best: "Best for established local businesses",
-    price: "$3,500",
+    price: "$3,900",
     priceNote: "Starting at · custom quote available",
     icon: "🏢",
     popular: true,
@@ -53,7 +64,7 @@ const packages = [
     tier: "Tier 3",
     name: "Growth Package",
     best: "Best for businesses ready to automate",
-    price: "$7,500",
+    price: "$8,900",
     priceNote: "Starting at · full automation included",
     icon: "🚀",
     popular: false,
@@ -75,31 +86,31 @@ const addons = [
     icon: "🔗",
     name: "CRM Integration",
     description: "Connect your website form directly to GoHighLevel CRM. Every lead auto-captured, tagged, and ready in your pipeline.",
-    price: "$750 one-time",
+    price: "$950 one-time",
   },
   {
     icon: "📅",
     name: "Smart Scheduling",
     description: "Embedded booking widget + automated 24hr and 1hr SMS reminders. Reduce no-shows and eliminate phone tag.",
-    price: "$400 one-time",
+    price: "$500 one-time",
   },
   {
     icon: "⭐",
     name: "Review Automation",
     description: "Auto-send Google review requests 2 hours after each completed appointment. Build your reputation on autopilot.",
-    price: "$300 one-time",
+    price: "$400 one-time",
   },
   {
     icon: "✍️",
     name: "Professional Copywriting",
     description: "Full AI-assisted copy for all pages, crafted for your specific industry and target customer in San Antonio.",
-    price: "$500 one-time",
+    price: "$650 one-time",
   },
   {
     icon: "⚡",
     name: "Rush Delivery",
     description: "Need it fast? Rush builds prioritized for 2–3 business day delivery on Tier 1 projects. Weekend work included.",
-    price: "+$900 surcharge",
+    price: "+$950 surcharge",
   },
 ];
 
@@ -109,11 +120,11 @@ const retainers = [
     price: "$0",
     period: "Pay $150/hr for updates as needed",
     highlight: false,
-    features: ["Updates billed hourly", "You manage everything yourself", "48hr response on paid requests"],
+    features: ["Updates billed at $150/hr", "You manage everything yourself", "48hr response on paid requests"],
   },
   {
     name: "Basic Maintenance",
-    price: "$300",
+    price: "$299",
     period: "per month",
     highlight: false,
     features: [
@@ -126,7 +137,7 @@ const retainers = [
   },
   {
     name: "Pro Maintenance",
-    price: "$600",
+    price: "$499",
     period: "per month",
     highlight: true,
     features: [
@@ -145,24 +156,57 @@ export default function ServicesPage() {
     <>
       <Hero
         compact
-        badge="Packages & Pricing"
+        badge="Services"
         headline={
           <>
-            Transparent Pricing.{" "}
-            <em style={{ fontStyle: "normal", color: "#E8B84B" }}>No Surprises.</em>
+            AI Voice Agents,{" "}
+            <em style={{ fontStyle: "normal", color: "#E8B84B" }}>Set Up For You.</em>
           </>
         }
-        subheadline="All packages include mobile-responsive design, basic SEO, and a 30-day post-launch support window."
+        subheadline="We build, test, and launch your AI receptionist. Websites and automation are available as add-on packages."
       />
+
+      {/* VOICE AGENT (MAIN SERVICE) */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="text-xs font-bold uppercase tracking-widest mb-2 text-gold">
+                Our Main Service
+              </div>
+              <h2 className="font-serif text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-4 text-navy">
+                AI Voice Agent Setup
+              </h2>
+              <p className="text-base leading-relaxed mb-6 text-gray-text">
+                A voice agent trained on your business that answers every call, answers common questions, qualifies leads, and books appointments — day or night. Pricing is scoped to your call volume and integrations, so you only pay for what you need.
+              </p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg font-bold text-sm bg-gold hover:bg-gold-light text-navy hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(201,146,42,0.3)] transition-all duration-200"
+              >
+                Book a Free Demo Call →
+              </Link>
+            </div>
+            <ul className="flex flex-col gap-3 rounded-2xl p-7 border border-gold bg-[rgba(201,146,42,0.05)]">
+              {voiceFeatures.map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm text-gray-text">
+                  <span className="text-gold-light flex-shrink-0 mt-px">◆</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
       {/* PACKAGES */}
       <section className="py-20 md:py-28 bg-cream">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-xs font-bold uppercase tracking-widest mb-2 text-gold">
-            Packages
+            Websites &amp; Automation
           </div>
           <h2 className="font-serif text-3xl md:text-4xl font-bold leading-tight tracking-tight mb-10 text-navy">
-            Pick Your Package
+            Need a Website Too?
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -322,10 +366,10 @@ export default function ServicesPage() {
         />
         <div className="relative max-w-2xl mx-auto px-6 text-center">
           <h2 className="font-serif text-3xl font-bold text-white leading-tight tracking-tight mb-3">
-            Not Sure Which Package Is Right for You?
+            Not Sure What You Need?
           </h2>
           <p className="text-sm mb-7 text-white/55">
-            Book a free 20-minute call and we&apos;ll help you figure out exactly what you need — no pressure, no pitch.
+            Book a free 20-minute call and we&apos;ll help you figure out exactly what you need — starting with a voice agent demo — no pressure, no pitch.
           </p>
           <Link
             href="/contact"

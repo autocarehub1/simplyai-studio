@@ -5,9 +5,9 @@ import TrustBar from "@/components/TrustBar";
 import ServiceCard from "@/components/ServiceCard";
 
 export const metadata: Metadata = {
-  title: "SimplyAI Studio | San Antonio Website Design & AI Automation",
+  title: "SimplyAI Studio | AI Voice Agent Setup for Small Businesses",
   description:
-    "Fast, beautiful websites and AI-powered automation for local businesses in San Antonio, TX. Starting at $1,800 with 5–7 day delivery.",
+    "We set up AI voice agents that answer every call, qualify leads, and book appointments 24/7 — so small businesses never miss another customer.",
 };
 
 const steps = [
@@ -15,51 +15,51 @@ const steps = [
     num: "01 — DISCOVERY",
     icon: "📞",
     title: "Free 20-Min Call",
-    body: "Tell us about your business and goals. We'll recommend the right package and give you a straight price — no runaround.",
+    body: "Tell us how calls come in today and where you're losing customers. We'll map out the right voice agent and give you a straight price — no runaround.",
   },
   {
     num: "02 — BUILD",
     icon: "🛠️",
-    title: "We Get to Work",
-    body: "Using AI-powered tools and proven workflows, we build your site and automation stack — no guesswork, no delays.",
+    title: "We Build Your Agent",
+    body: "We build and configure your voice agent: your greeting, your services, your pricing, your booking rules — connected to your calendar and CRM.",
   },
   {
     num: "03 — REVIEW",
     icon: "🖥️",
-    title: "You Approve It",
-    body: "We send you a live preview. You give feedback, we refine it. Revisions included — no nickel-and-diming on small changes.",
+    title: "Test & Refine",
+    body: "Call your agent yourself. We test real scenarios together, refine the script and tone, and tweak until it sounds like your business.",
   },
   {
     num: "04 — LAUNCH",
     icon: "🚀",
     title: "Go Live",
-    body: "We connect your domain, submit to Google, and walk you through everything on a recorded video call. You're in control.",
+    body: "We forward your number, switch the agent on, and walk you through everything on a recorded video call. You're in control.",
   },
 ];
 
 const homeServices = [
   {
+    icon: "📞",
+    name: "AI Voice Agent Setup",
+    description:
+      "A custom AI receptionist that answers every call in a natural voice, handles common questions, and never puts a customer on hold.",
+    features: ["Answers calls 24/7", "Trained on your business", "Call forwarding & transfer to you"],
+    href: "/services",
+  },
+  {
+    icon: "📅",
+    name: "Booking & Lead Capture",
+    description:
+      "Your agent qualifies callers, books appointments straight into your calendar, and sends every lead to your CRM with a summary.",
+    features: ["Calendar integration", "CRM & SMS follow-up", "Call summaries & transcripts"],
+    href: "/services",
+  },
+  {
     icon: "🌐",
-    name: "Website Design & Development",
+    name: "Websites & Automation",
     description:
-      "Custom, fast, mobile-first websites that make your business look credible and convert visitors into paying customers.",
-    features: ["Mobile-responsive design", "On-page SEO built in", "5–7 day delivery"],
-    href: "/services",
-  },
-  {
-    icon: "🤖",
-    name: "AI-Powered Automation",
-    description:
-      "CRM setup, auto lead capture, SMS follow-up sequences, appointment booking, and review automation — all on autopilot.",
-    features: ["GoHighLevel CRM", "Auto SMS follow-up", "Appointment reminders"],
-    href: "/services",
-  },
-  {
-    icon: "📈",
-    name: "Local SEO & Analytics",
-    description:
-      "Get found on Google, track what's working, and grow your online presence month over month with data you can actually use.",
-    features: ["Google Analytics 4", "Search Console setup", "Monthly reports"],
+      "Need a site or follow-up automation to go with it? We build fast, mobile-first websites and CRM workflows that work alongside your agent.",
+    features: ["Mobile-responsive design", "GoHighLevel CRM", "5–7 day site delivery"],
     href: "/services",
   },
 ];
@@ -68,19 +68,20 @@ export default function HomePage() {
   return (
     <>
       <Hero
-        badge="San Antonio, TX · Now Accepting New Clients"
+        badge="AI Voice Agents · Now Accepting New Clients"
         headline={
           <>
-            Your Business Deserves a Website That{" "}
-            <em style={{ fontStyle: "normal", color: "#E8B84B" }}>Actually Works</em>
+            Never Miss Another Call. Let an{" "}
+            <em style={{ fontStyle: "normal", color: "#E8B84B" }}>AI Voice Agent</em>{" "}
+            Answer It.
           </>
         }
-        subheadline="We build fast, beautiful websites and AI-powered automation systems for local businesses — starting at $1,800. No tech overwhelm. No bloated agency fees."
-        primaryCta={{ label: "View Packages →", href: "/services" }}
+        subheadline="We set up AI voice agents that answer your calls, qualify leads, and book appointments 24/7 — so you can stay focused on the work. No tech overwhelm. No bloated agency fees."
+        primaryCta={{ label: "Book a Free Demo Call →", href: "/contact" }}
         secondaryCta={{ label: "See How It Works", href: "#how-it-works" }}
         trustItems={[
-          { icon: "⚡", label: "5–7 Day Delivery" },
-          { icon: "🤖", label: "AI-Powered Builds" },
+          { icon: "📞", label: "Answers 24/7" },
+          { icon: "🤖", label: "Custom-Trained Agents" },
           { icon: "📍", label: "San Antonio Local" },
           { icon: "🔓", label: "No Hidden Fees" },
         ]}
@@ -98,7 +99,7 @@ export default function HomePage() {
             Simple. Fast. Done Right.
           </h2>
           <p className="text-base leading-relaxed mb-12 max-w-lg text-gray-text">
-            Most agencies take 6–8 weeks and leave you confused. We deliver in days and make sure you understand everything.
+            Most voice AI tools leave you to figure out the setup alone. We do it all for you and make sure you understand everything.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -131,13 +132,13 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
             <h2 className="font-serif text-3xl md:text-4xl font-bold leading-tight tracking-tight text-navy">
-              Services Built for Local Businesses
+              Voice AI Built for Small Businesses
             </h2>
             <Link
               href="/services"
               className="text-sm font-semibold flex-shrink-0 text-gold hover:text-gold-light transition-colors duration-200"
             >
-              View all packages →
+              View all services →
             </Link>
           </div>
 
@@ -162,13 +163,13 @@ export default function HomePage() {
         />
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <div className="text-xs font-bold uppercase tracking-widest mb-3 text-gold-light">
-            Ready to Grow?
+            Stop Losing Calls
           </div>
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-white leading-tight tracking-tight mb-4">
-            Let&apos;s Build Something That Gets You Results
+            Let&apos;s Put an Agent on Your Phones
           </h2>
           <p className="text-sm leading-relaxed mb-8 text-white/55">
-            Schedule your free 20-minute discovery call today. No pressure, no pitch — just a straight conversation about your business goals.
+            Book a free 20-minute call and hear a demo voice agent for your type of business. No pressure, no pitch.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link

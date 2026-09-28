@@ -19,6 +19,7 @@ const INDUSTRIES = [
 ];
 
 const SERVICES = [
+  "AI Voice Agent Setup",
   "Starter Site ($1,800)",
   "Professional Site ($3,500+)",
   "Growth Package ($7,500+)",

@@ -27,7 +27,7 @@ export default function Footer() {
               <Image src="/logo.png" alt="SimplyAI Studio" width={180} height={72} className="h-16 w-auto" />
             </div>
             <p className="text-sm leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Intelligent builds for ambitious businesses. Fast, beautiful websites and AI-powered automation for local businesses in San Antonio.
+              AI voice agents that answer your calls, qualify leads, and book appointments 24/7 — set up for small businesses, starting in San Antonio.
             </p>
             <div className="flex gap-3">
               <a
