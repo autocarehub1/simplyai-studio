@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Reveal from "@/components/Reveal";
 import { SITE_URL } from "@/lib/constants";
 
 const title = "Our Work | SimplyAI Studio";
@@ -106,11 +107,11 @@ export default function WorkPage() {
 
         {/* Stats */}
         <div className="flex flex-wrap justify-center gap-8 mt-6">
-          {stats.map(([stat, label]) => (
-            <div key={label as string} className="text-center">
+          {stats.map(([stat, label], i) => (
+            <Reveal key={label as string} delay={i * 90} className="text-center">
               <p className="text-3xl font-bold" style={{ color: "#E8B84B" }}>{stat}</p>
               <p className="text-white/60 text-xs mt-1">{label as string}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -119,8 +120,8 @@ export default function WorkPage() {
       <section className="py-20 px-6" style={{ background: "#f8f6f2" }}>
         <div className="max-w-6xl mx-auto space-y-12">
           {projects.map((p, i) => (
+            <Reveal key={p.name} delay={0}>
             <div
-              key={p.name}
               className={`rounded-3xl overflow-hidden shadow-md border border-white/60 flex flex-col ${
                 i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
               }`}
@@ -212,6 +213,7 @@ export default function WorkPage() {
                 </div>
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
       </section>

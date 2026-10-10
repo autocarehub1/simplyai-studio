@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Reveal from "@/components/Reveal";
+import VoiceWaveform from "@/components/VoiceWaveform";
 
 // Looks for /public/audio/demo-call.mp3. Until a real recording is added
 // there, this degrades to a CTA instead of a broken/silent player — never
@@ -10,14 +12,16 @@ export default function DemoAudio() {
   const [available, setAvailable] = useState(true);
 
   return (
-    <section className="py-16 md:py-20 bg-navy-mid">
-      <div className="max-w-3xl mx-auto px-6 text-center">
+    <section className="py-16 md:py-20 bg-navy-mid overflow-hidden">
+      <Reveal className="max-w-3xl mx-auto px-6 text-center">
         <div className="text-xs font-bold uppercase tracking-widest mb-3 text-gold-light">
           Hear It For Yourself
         </div>
-        <h2 className="font-serif text-2xl md:text-3xl font-bold text-white mb-4 leading-tight">
+        <h2 className="font-serif text-2xl md:text-3xl font-bold text-white mb-6 leading-tight">
           This Is What Your Customers Will Hear
         </h2>
+
+        <VoiceWaveform height={56} className="mb-6" />
 
         {available ? (
           <>
@@ -47,7 +51,7 @@ export default function DemoAudio() {
             </Link>
           </>
         )}
-      </div>
+      </Reveal>
     </section>
   );
 }

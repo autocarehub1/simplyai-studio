@@ -3,6 +3,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import Hero from "@/components/Hero";
 import ServiceCard from "@/components/ServiceCard";
+import Reveal from "@/components/Reveal";
 import { SITE_URL } from "@/lib/constants";
 
 const title = "AI Voice Agent Setup & Services | SimplyAI Studio";
@@ -177,7 +178,7 @@ export default function ServicesPage() {
       <section className="py-20 md:py-28 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
+            <Reveal>
               <div className="text-xs font-bold uppercase tracking-widest mb-2 text-gold">
                 Our Main Service
               </div>
@@ -193,13 +194,13 @@ export default function ServicesPage() {
               >
                 Book a Free Demo Call →
               </Link>
-            </div>
+            </Reveal>
             <ul className="flex flex-col gap-3 rounded-2xl p-7 border border-gold bg-[rgba(201,146,42,0.05)]">
-              {voiceFeatures.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-text">
-                  <span className="text-gold-light flex-shrink-0 mt-px">◆</span>
+              {voiceFeatures.map((f, i) => (
+                <Reveal as="li" key={f} delay={i * 60} className="flex items-start gap-2 text-sm text-gray-text">
+                  <span className="text-gold-light flex-shrink-0 mt-px" aria-hidden="true">◆</span>
                   {f}
-                </li>
+                </Reveal>
               ))}
             </ul>
           </div>
@@ -217,11 +218,11 @@ export default function ServicesPage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {packages.map((pkg) => (
+            {packages.map((pkg, i) => (
+              <Reveal key={pkg.name} delay={i * 100} className="h-full">
               <div
-                key={pkg.name}
                 className={clsx(
-                  "rounded-2xl p-7 border relative transition-all duration-200 flex flex-col hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(13,31,53,0.1)]",
+                  "rounded-2xl p-7 border relative transition-all duration-200 flex flex-col hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(13,31,53,0.1)] h-full",
                   pkg.popular
                     ? "border-gold bg-[rgba(201,146,42,0.05)] shadow-[0_0_0_2px_rgba(201,146,42,0.2)]"
                     : "border-gray-border bg-white hover:border-gold"
@@ -252,7 +253,7 @@ export default function ServicesPage() {
                 <ul className="flex flex-col gap-2.5 flex-1">
                   {pkg.features.map((f) => (
                     <li key={f} className="flex items-start gap-2 text-sm text-gray-text">
-                      <span className="text-gold-light flex-shrink-0 mt-px">◆</span>
+                      <span className="text-gold-light flex-shrink-0 mt-px" aria-hidden="true">◆</span>
                       {f}
                     </li>
                   ))}
@@ -269,6 +270,7 @@ export default function ServicesPage() {
                   Get Started →
                 </Link>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -288,14 +290,15 @@ export default function ServicesPage() {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {addons.map((addon) => (
-              <ServiceCard
-                key={addon.name}
-                icon={addon.icon}
-                name={addon.name}
-                description={addon.description}
-                price={addon.price}
-              />
+            {addons.map((addon, i) => (
+              <Reveal key={addon.name} delay={i * 70}>
+                <ServiceCard
+                  icon={addon.icon}
+                  name={addon.name}
+                  description={addon.description}
+                  price={addon.price}
+                />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -315,11 +318,11 @@ export default function ServicesPage() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {retainers.map((r) => (
+            {retainers.map((r, i) => (
+              <Reveal key={r.name} delay={i * 100} className="h-full">
               <div
-                key={r.name}
                 className={clsx(
-                  "rounded-xl p-6 border transition-all duration-200 flex flex-col",
+                  "rounded-xl p-6 border transition-all duration-200 flex flex-col h-full",
                   r.highlight
                     ? "bg-navy border-gold"
                     : "bg-white border-gray-border hover:border-gold hover:shadow-[0_8px_24px_rgba(13,31,53,0.08)]"
@@ -340,7 +343,7 @@ export default function ServicesPage() {
                       key={f}
                       className={clsx("flex items-start gap-2 text-sm", r.highlight ? "text-white/70" : "text-gray-text")}
                     >
-                      <span className="text-gold flex-shrink-0">◆</span>
+                      <span className="text-gold flex-shrink-0" aria-hidden="true">◆</span>
                       {f}
                     </li>
                   ))}
@@ -357,6 +360,7 @@ export default function ServicesPage() {
                   Select Plan →
                 </Link>
               </div>
+              </Reveal>
             ))}
           </div>
         </div>

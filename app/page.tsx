@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import ServiceCard from "@/components/ServiceCard";
 import DemoAudio from "@/components/DemoAudio";
+import Reveal from "@/components/Reveal";
 import { SITE_URL } from "@/lib/constants";
 
 const title = "SimplyAI Studio | AI Voice Agent Setup for Small Businesses";
@@ -113,22 +114,21 @@ export default function HomePage() {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {steps.map((step) => (
-              <div
-                key={step.num}
-                className="rounded-xl p-6 border border-gray-border bg-cream hover:border-gold hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(13,31,53,0.08)] transition-all duration-200 cursor-default"
-              >
-                <div className="text-xs font-mono font-medium tracking-wider mb-3 text-gold">
-                  {step.num}
+            {steps.map((step, i) => (
+              <Reveal key={step.num} delay={i * 90}>
+                <div className="rounded-xl p-6 border border-gray-border bg-cream hover:border-gold hover:-translate-y-1 hover:shadow-[0_12px_32px_rgba(13,31,53,0.08)] transition-all duration-200 cursor-default h-full">
+                  <div className="text-xs font-mono font-medium tracking-wider mb-3 text-gold">
+                    {step.num}
+                  </div>
+                  <div className="text-3xl mb-3" aria-hidden="true">{step.icon}</div>
+                  <h3 className="font-serif text-base font-bold mb-2 text-navy">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-gray-text">
+                    {step.body}
+                  </p>
                 </div>
-                <div className="text-3xl mb-3" aria-hidden="true">{step.icon}</div>
-                <h3 className="font-serif text-base font-bold mb-2 text-navy">
-                  {step.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-gray-text">
-                  {step.body}
-                </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -153,8 +153,10 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {homeServices.map((svc) => (
-              <ServiceCard key={svc.name} {...svc} />
+            {homeServices.map((svc, i) => (
+              <Reveal key={svc.name} delay={i * 100}>
+                <ServiceCard {...svc} />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -165,13 +167,25 @@ export default function HomePage() {
         className="py-20 relative overflow-hidden bg-navy"
       >
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="absolute inset-0 pointer-events-none animate-aurora"
           style={{
             background:
-              "radial-gradient(ellipse 60% 80% at 50% 100%, rgba(201,146,42,0.1) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 80% at 50% 100%, rgba(201,146,42,0.12) 0%, transparent 70%)",
           }}
         />
-        <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <div
+          className="absolute animate-orb-slow pointer-events-none"
+          style={{
+            top: "10%",
+            left: "12%",
+            width: 180,
+            height: 180,
+            borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(232,184,75,0.12) 0%, transparent 70%)",
+            filter: "blur(6px)",
+          }}
+        />
+        <Reveal className="relative max-w-3xl mx-auto px-6 text-center">
           <div className="text-xs font-bold uppercase tracking-widest mb-3 text-gold-light">
             Stop Losing Calls
           </div>
@@ -195,7 +209,7 @@ export default function HomePage() {
               <span aria-hidden="true">📞</span> (210) 978-6160
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </>
   );

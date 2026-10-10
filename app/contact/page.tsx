@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Hero from "@/components/Hero";
 import ContactForm from "@/components/ContactForm";
 import CalendlyEmbed from "@/components/CalendlyEmbed";
+import Reveal from "@/components/Reveal";
 import { CALENDLY_URL, SITE_URL } from "@/lib/constants";
 
 const title = "Contact Us | SimplyAI Studio — San Antonio";
@@ -85,9 +86,10 @@ export default function ContactPage() {
               </div>
 
               <div className="flex flex-col gap-4">
-                {contactItems.map((item) => (
-                  <div
+                {contactItems.map((item, i) => (
+                  <Reveal
                     key={item.label}
+                    delay={i * 80}
                     className="flex items-start gap-4 rounded-xl p-4 bg-white/4 border border-white/7"
                   >
                     <div className="text-xl flex-shrink-0 mt-0.5" aria-hidden="true">{item.icon}</div>
@@ -108,7 +110,7 @@ export default function ContactPage() {
                         </span>
                       )}
                     </div>
-                  </div>
+                  </Reveal>
                 ))}
               </div>
 
@@ -123,14 +125,14 @@ export default function ContactPage() {
                   "We scope your agent and give you a straight price",
                   "Your agent goes live once you approve it",
                 ].map((step, i) => (
-                  <div key={i} className="flex items-start gap-3 mb-3 last:mb-0">
+                  <Reveal key={i} delay={i * 80} className="flex items-start gap-3 mb-3 last:mb-0">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white bg-gold">
                       {i + 1}
                     </div>
                     <span className="text-sm text-white/60">
                       {step}
                     </span>
-                  </div>
+                  </Reveal>
                 ))}
               </div>
             </div>

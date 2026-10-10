@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Hero from "@/components/Hero";
+import Reveal from "@/components/Reveal";
 import { SITE_URL } from "@/lib/constants";
 
 const title = "About | SimplyAI Studio — AI Voice Agents for Small Businesses";
@@ -95,11 +96,8 @@ export default function AboutPage() {
                 { num: "Free", label: "Demo call", sub: "Hear it for your business" },
                 { num: "100%", label: "Ownership", sub: "Your number, your data" },
                 { num: "24hr", label: "Response time", sub: "During your setup" },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="rounded-xl p-5 border border-gray-border bg-cream"
-                >
+              ].map((s, i) => (
+                <Reveal key={s.label} delay={i * 90} className="rounded-xl p-5 border border-gray-border bg-cream">
                   <div className="font-serif text-2xl font-bold mb-1 text-gold">
                     {s.num}
                   </div>
@@ -109,7 +107,7 @@ export default function AboutPage() {
                   <div className="text-xs text-gray-text">
                     {s.sub}
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -127,19 +125,18 @@ export default function AboutPage() {
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {values.map((v) => (
-              <div
-                key={v.title}
-                className="rounded-xl p-6 border border-gray-border bg-white hover:border-gold hover:shadow-[0_8px_24px_rgba(13,31,53,0.06)] transition-all duration-200"
-              >
-                <div className="text-2xl mb-3" aria-hidden="true">{v.icon}</div>
-                <h3 className="font-serif text-lg font-bold mb-2 text-navy">
-                  {v.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-gray-text">
-                  {v.body}
-                </p>
-              </div>
+            {values.map((v, i) => (
+              <Reveal key={v.title} delay={i * 90}>
+                <div className="rounded-xl p-6 border border-gray-border bg-white hover:border-gold hover:shadow-[0_8px_24px_rgba(13,31,53,0.06)] transition-all duration-200 h-full">
+                  <div className="text-2xl mb-3" aria-hidden="true">{v.icon}</div>
+                  <h3 className="font-serif text-lg font-bold mb-2 text-navy">
+                    {v.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-gray-text">
+                    {v.body}
+                  </p>
+                </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -167,14 +164,15 @@ export default function AboutPage() {
               </Link>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {whoWeServe.map((item) => (
-                <div
+              {whoWeServe.map((item, i) => (
+                <Reveal
                   key={item}
+                  delay={i * 60}
                   className="rounded-lg px-4 py-3 text-sm font-medium flex items-center gap-2 bg-white/5 border border-white/8 text-white/75"
                 >
-                  <span className="text-gold-light">◆</span>
+                  <span className="text-gold-light" aria-hidden="true">◆</span>
                   {item}
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>

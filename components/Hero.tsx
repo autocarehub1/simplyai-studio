@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import VoiceWaveform from "@/components/VoiceWaveform";
 
 interface HeroProps {
   badge?: string;
@@ -28,21 +29,46 @@ export default function Hero({
       }`}
       style={{ background: "#0D1F35" }}
     >
-      {/* Grid overlay */}
+      {/* Grid overlay — slowly pans to feel alive without being distracting */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none animate-grid-pan"
         style={{
           backgroundImage:
             "linear-gradient(rgba(201,146,42,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,146,42,0.04) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
-      {/* Glow */}
+      {/* Aurora glow — drifts slowly behind the headline */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none animate-aurora"
         style={{
           background:
-            "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,146,42,0.12) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 100% 100%, rgba(46,134,193,0.06) 0%, transparent 60%)",
+            "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,146,42,0.14) 0%, transparent 70%), radial-gradient(ellipse 50% 60% at 100% 100%, rgba(46,134,193,0.07) 0%, transparent 60%)",
+        }}
+      />
+      {/* Floating orbs — subtle depth cue, blurred so they never read as shapes */}
+      <div
+        className="absolute animate-orb pointer-events-none"
+        style={{
+          top: "18%",
+          left: "8%",
+          width: 220,
+          height: 220,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(232,184,75,0.16) 0%, transparent 70%)",
+          filter: "blur(8px)",
+        }}
+      />
+      <div
+        className="absolute animate-orb-slow pointer-events-none"
+        style={{
+          top: "55%",
+          right: "10%",
+          width: 280,
+          height: 280,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(46,134,193,0.14) 0%, transparent 70%)",
+          filter: "blur(10px)",
         }}
       />
 
@@ -77,6 +103,8 @@ export default function Hero({
         >
           {subheadline}
         </p>
+
+        <VoiceWaveform className="animate-fade-up-2 mt-6" height={28} />
 
         {(primaryCta || secondaryCta) && (
           <div className="animate-fade-up-3 flex flex-col sm:flex-row gap-3 mt-8 w-full justify-center">

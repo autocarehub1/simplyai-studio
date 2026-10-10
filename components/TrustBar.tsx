@@ -1,3 +1,5 @@
+import Reveal from "@/components/Reveal";
+
 interface StatItem {
   value: string;
   label: string;
@@ -24,8 +26,8 @@ export default function TrustBar({ stats = defaultStats }: TrustBarProps) {
       }}
     >
       <div className="max-w-6xl mx-auto px-6 py-8 flex flex-wrap justify-center gap-x-16 gap-y-6">
-        {stats.map((stat) => (
-          <div key={stat.label} className="flex flex-col items-center text-center">
+        {stats.map((stat, i) => (
+          <Reveal key={stat.label} delay={i * 90} className="flex flex-col items-center text-center">
             <span
               className="font-serif text-2xl font-bold leading-none mb-1"
               style={{ color: "#E8B84B" }}
@@ -35,7 +37,7 @@ export default function TrustBar({ stats = defaultStats }: TrustBarProps) {
             <span className="text-xs font-medium" style={{ color: "rgba(255,255,255,0.45)" }}>
               {stat.label}
             </span>
-          </div>
+          </Reveal>
         ))}
       </div>
     </div>
