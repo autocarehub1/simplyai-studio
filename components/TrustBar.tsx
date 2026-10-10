@@ -8,10 +8,10 @@ interface TrustBarProps {
 }
 
 const defaultStats: StatItem[] = [
-  { value: "24/7", label: "Calls answered" },
-  { value: "Free", label: "Demo call" },
+  { value: "24/7", label: "Calls answered, every time" },
+  { value: "<2hr", label: "Average response time" },
   { value: "100%", label: "Done-for-you setup" },
-  { value: "You", label: "Own your number & data" },
+  { value: "San Antonio", label: "Built & based locally" },
 ];
 
 export default function TrustBar({ stats = defaultStats }: TrustBarProps) {

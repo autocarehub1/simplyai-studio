@@ -1,13 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE_URL } from "@/lib/constants";
+
+const title = "Our Work | SimplyAI Studio";
+const description =
+  "AI voice agents and websites we've built for local businesses. Real clients, real projects.";
 
 export const metadata: Metadata = {
-  title: "Our Work | SimplyAI Studio",
-  description:
-    "Browse websites and automation systems we've built for local businesses. Real results, real clients.",
+  title,
+  description,
+  alternates: { canonical: `${SITE_URL}/work` },
+  openGraph: { title, description, url: `${SITE_URL}/work` },
+  twitter: { title, description },
 };
 
 const projects = [
+  {
+    name: "JunkHive Pros",
+    industry: "Junk Removal",
+    package: "AI Voice Agent Setup",
+    packageColor: "#C9922A",
+    description:
+      "A live AI voice agent that answers every call 24/7, qualifies the job, quotes pricing by category and size, checks real availability, and books the appointment directly — no app, no hold music, no missed leads.",
+    tags: ["AI Voice Agent", "Vapi", "Live Booking", "24/7 Answering"],
+    url: "",
+    emoji: "📞",
+    bg: "#0D1F35",
+    accent: "#E8B84B",
+    deliverables: ["24/7 call answering", "Real-time booking", "Custom pricing logic", "SMS confirmations"],
+  },
   {
     name: "Swift Plumbing & Heating",
     industry: "Home Services",
@@ -16,11 +37,11 @@ const projects = [
     description:
       "5-page mobile-first site with service pages, contact form, Google Maps embed, and basic on-page SEO. Delivered in 6 days.",
     tags: ["Plumbing", "Local SEO", "Contact Form", "Google Maps"],
-    url: "#",
+    url: "",
     emoji: "🔧",
     bg: "#1e3a5f",
     accent: "#f97316",
-    deliverables: ["5 pages", "Mobile responsive", "SEO ready", "5-day delivery"],
+    deliverables: ["5 pages", "Mobile responsive", "SEO ready", "6-day delivery"],
   },
   {
     name: "Bloom Beauty Salon",
@@ -30,7 +51,7 @@ const projects = [
     description:
       "8-page custom site with service pricing, team profiles, gallery, blog, GA4 integration, and Google Search Console setup.",
     tags: ["Salon", "Blog", "Gallery", "GA4"],
-    url: "#",
+    url: "",
     emoji: "✿",
     bg: "#1c1917",
     accent: "#e8a598",
@@ -44,7 +65,7 @@ const projects = [
     description:
       "Full growth stack: custom site, GoHighLevel CRM, online booking widget, auto SMS sequences, appointment reminders, and review automation.",
     tags: ["Med Spa", "GoHighLevel", "Booking", "n8n", "SMS Automation"],
-    url: "https://growth-package-jnop4idlu-emmanuel-dev-s-projects.vercel.app/",
+    url: "https://growth-package.vercel.app/",
     emoji: "◆",
     bg: "#0d2b1e",
     accent: "#c9a84c",
@@ -53,10 +74,10 @@ const projects = [
 ];
 
 const stats = [
-  ["3+", "Sites Launched"],
+  ["4", "Projects Launched"],
   ["100%", "On-Time Delivery"],
-  ["5★", "Client Rating"],
-  ["3", "Industries Served"],
+  ["<2hr", "Response Time"],
+  ["2", "Service Types"],
 ];
 
 export default function WorkPage() {
@@ -76,10 +97,10 @@ export default function WorkPage() {
         <h1
           className="font-serif text-4xl md:text-6xl font-bold text-white mb-5 leading-tight"
         >
-          Websites We've Built
+          Voice Agents &amp; Sites We&apos;ve Built
         </h1>
         <p className="text-white/70 max-w-xl mx-auto text-base leading-relaxed mb-8">
-          Every site is custom-designed for the client's industry, goals, and budget.
+          Every project is custom-built for the client&apos;s business, goals, and budget.
           No templates recycled. No cookie-cutter results.
         </p>
 
@@ -109,7 +130,7 @@ export default function WorkPage() {
                 className="md:w-5/12 min-h-64 flex flex-col items-center justify-center p-10 text-center flex-shrink-0"
                 style={{ background: p.bg }}
               >
-                <div className="text-8xl mb-4">{p.emoji}</div>
+                <div className="text-8xl mb-4" aria-hidden="true">{p.emoji}</div>
                 <p className="font-bold text-white text-xl mb-1">{p.name}</p>
                 <p style={{ color: p.accent }} className="text-sm font-medium mb-4">
                   {p.industry}
@@ -163,26 +184,30 @@ export default function WorkPage() {
                         key={d}
                         className="flex items-center gap-1 text-xs text-gray-700 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"
                       >
-                        <span style={{ color: "#C9922A" }}>✓</span> {d}
+                        <span style={{ color: "#C9922A" }} aria-hidden="true">✓</span> {d}
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 <div className="flex gap-3">
-                  <a
-                    href={p.url}
-                    className="text-sm font-semibold px-5 py-2.5 rounded-lg transition-all"
-                    style={{ background: "#0D1F35", color: "white" }}
-                  >
-                    View Live Site →
-                  </a>
+                  {p.url && (
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-semibold px-5 py-2.5 rounded-lg transition-all"
+                      style={{ background: "#0D1F35", color: "white" }}
+                    >
+                      View Live Site →
+                    </a>
+                  )}
                   <Link
                     href="/contact"
                     className="text-sm font-semibold px-5 py-2.5 rounded-lg border transition-all"
                     style={{ borderColor: "#C9922A", color: "#C9922A" }}
                   >
-                    Get a Similar Site
+                    {p.package === "AI Voice Agent Setup" ? "Get Your Own Agent" : "Get a Similar Site"}
                   </Link>
                 </div>
               </div>
@@ -203,11 +228,11 @@ export default function WorkPage() {
           Ready to Be Featured Here?
         </p>
         <h2 className="font-serif text-3xl md:text-4xl font-bold text-white mb-4">
-          Let's Build Your Site Next
+          Let&apos;s Build Your Project Next
         </h2>
         <p className="text-white/70 mb-8 max-w-lg mx-auto text-sm leading-relaxed">
-          Whether you need a clean 5-page starter or a full growth stack with automation —
-          we'll deliver it fast, at a fair price.
+          Whether you need an AI voice agent answering your phones or a full website build —
+          we&apos;ll deliver it fast, at a fair price.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link

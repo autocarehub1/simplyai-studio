@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
 import Hero from "@/components/Hero";
 import ContactForm from "@/components/ContactForm";
+import CalendlyEmbed from "@/components/CalendlyEmbed";
+import { CALENDLY_URL, SITE_URL } from "@/lib/constants";
+
+const title = "Contact Us | SimplyAI Studio — San Antonio";
+const description =
+  "Get in touch with SimplyAI Studio. Book a free 20-minute discovery call or submit your project details. We respond within 24 business hours.";
 
 export const metadata: Metadata = {
-  title: "Contact Us | SimplyAI Studio — San Antonio",
-  description:
-    "Get in touch with SimplyAI Studio. Book a free 20-minute discovery call or submit your project details. We respond within 24 business hours.",
+  title,
+  description,
+  alternates: { canonical: `${SITE_URL}/contact` },
+  openGraph: { title, description, url: `${SITE_URL}/contact` },
+  twitter: { title, description },
 };
 
 const contactItems = [
@@ -43,11 +51,12 @@ export default function ContactPage() {
         badge="Get In Touch"
         headline={
           <>
-            Let&apos;s Build Your{" "}
-            <em style={{ fontStyle: "normal", color: "#E8B84B" }}>Business Online</em>
+            Let&apos;s Put an{" "}
+            <em style={{ fontStyle: "normal", color: "#E8B84B" }}>AI Voice Agent</em>{" "}
+            On Your Phones
           </>
         }
-        subheadline="Fill out the form below and we'll be in touch within 24 hours to confirm your project and schedule your free discovery call."
+        subheadline="Book your free 20-minute demo call below, or leave your number and we'll call you."
       />
 
       <section className="py-20 md:py-28 bg-navy-mid relative">
@@ -71,7 +80,7 @@ export default function ContactPage() {
                   Simply<span className="text-gold-light">AI</span> Studio
                 </h2>
                 <p className="text-sm leading-relaxed text-white/50">
-                  Intelligent builds for ambitious businesses. We&apos;re ready to hear about yours.
+                  AI voice agents for small businesses, built in San Antonio. We&apos;re ready to hear about yours.
                 </p>
               </div>
 
@@ -81,7 +90,7 @@ export default function ContactPage() {
                     key={item.label}
                     className="flex items-start gap-4 rounded-xl p-4 bg-white/4 border border-white/7"
                   >
-                    <div className="text-xl flex-shrink-0 mt-0.5">{item.icon}</div>
+                    <div className="text-xl flex-shrink-0 mt-0.5" aria-hidden="true">{item.icon}</div>
                     <div>
                       <div className="text-xs font-semibold uppercase tracking-wider mb-0.5 text-gold">
                         {item.label}
@@ -109,10 +118,10 @@ export default function ContactPage() {
                   What Happens Next
                 </div>
                 {[
-                  "We review your submission within 24 hours",
-                  "You receive a calendar link for your free call",
-                  "We send your custom proposal + quote",
-                  "Project kicks off once deposit is received",
+                  "Book instantly on the calendar, or leave your number",
+                  "We call or text you back fast — usually same day",
+                  "We scope your agent and give you a straight price",
+                  "Your agent goes live once you approve it",
                 ].map((step, i) => (
                   <div key={i} className="flex items-start gap-3 mb-3 last:mb-0">
                     <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white bg-gold">
@@ -126,8 +135,20 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Right: form */}
-            <div className="lg:col-span-3">
+            {/* Right: calendar + form */}
+            <div className="lg:col-span-3 flex flex-col gap-6">
+              <div className="rounded-2xl overflow-hidden bg-white/4 border border-white/7 p-2">
+                <CalendlyEmbed url={CALENDLY_URL} height={650} />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-px bg-white/10" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-white/35">
+                  Or leave your number
+                </span>
+                <div className="flex-1 h-px bg-white/10" />
+              </div>
+
               <ContactForm />
             </div>
           </div>

@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Hero from "@/components/Hero";
+import { SITE_URL } from "@/lib/constants";
+
+const title = "About | SimplyAI Studio — AI Voice Agents for Small Businesses";
+const description =
+  "SimplyAI Studio is a San Antonio-based studio that sets up AI voice agents for small businesses, so no call or customer goes unanswered. Learn our story.";
 
 export const metadata: Metadata = {
-  title: "About | SimplyAI Studio — AI Voice Agents for Small Businesses",
-  description:
-    "SimplyAI Studio is a San Antonio-based studio that sets up AI voice agents for small businesses, so no call or customer goes unanswered. Learn our story.",
+  title,
+  description,
+  alternates: { canonical: `${SITE_URL}/about` },
+  openGraph: { title, description, url: `${SITE_URL}/about` },
+  twitter: { title, description },
 };
 
 const values = [
@@ -125,7 +132,7 @@ export default function AboutPage() {
                 key={v.title}
                 className="rounded-xl p-6 border border-gray-border bg-white hover:border-gold hover:shadow-[0_8px_24px_rgba(13,31,53,0.06)] transition-all duration-200"
               >
-                <div className="text-2xl mb-3">{v.icon}</div>
+                <div className="text-2xl mb-3" aria-hidden="true">{v.icon}</div>
                 <h3 className="font-serif text-lg font-bold mb-2 text-navy">
                   {v.title}
                 </h3>
@@ -187,7 +194,7 @@ export default function AboutPage() {
             href="/contact"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg font-bold text-sm bg-gold hover:bg-gold-light text-navy hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(201,146,42,0.3)] transition-all duration-200"
           >
-            Get a Free Quote →
+            Book a Free Demo Call →
           </Link>
         </div>
       </section>

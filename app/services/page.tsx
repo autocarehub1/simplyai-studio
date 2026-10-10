@@ -3,11 +3,18 @@ import Link from "next/link";
 import clsx from "clsx";
 import Hero from "@/components/Hero";
 import ServiceCard from "@/components/ServiceCard";
+import { SITE_URL } from "@/lib/constants";
+
+const title = "AI Voice Agent Setup & Services | SimplyAI Studio";
+const description =
+  "Done-for-you AI voice agent setup for small businesses: 24/7 call answering, lead qualification, and appointment booking. Websites and CRM automation available too.";
 
 export const metadata: Metadata = {
-  title: "AI Voice Agent Setup & Services | SimplyAI Studio",
-  description:
-    "Done-for-you AI voice agent setup for small businesses: 24/7 call answering, lead qualification, and appointment booking. Websites and CRM automation available too.",
+  title,
+  description,
+  alternates: { canonical: `${SITE_URL}/services` },
+  openGraph: { title, description, url: `${SITE_URL}/services` },
+  twitter: { title, description },
 };
 
 const voiceFeatures = [
@@ -225,7 +232,7 @@ export default function ServicesPage() {
                     Most Popular
                   </div>
                 )}
-                <div className="text-3xl mb-3">{pkg.icon}</div>
+                <div className="text-3xl mb-3" aria-hidden="true">{pkg.icon}</div>
                 <div className="text-xs font-mono font-medium tracking-wider mb-1 text-gold">
                   {pkg.tier}
                 </div>

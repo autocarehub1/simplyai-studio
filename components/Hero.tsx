@@ -130,7 +130,7 @@ export default function Hero({
                 className="flex items-center gap-2 text-xs font-medium"
                 style={{ color: "rgba(255,255,255,0.45)" }}
               >
-                <span className="text-base">{item.icon}</span>
+                <span className="text-base" aria-hidden="true">{item.icon}</span>
                 {item.label}
               </div>
             ))}

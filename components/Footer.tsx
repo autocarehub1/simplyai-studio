@@ -6,8 +6,14 @@ import Link from "next/link";
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
+  { label: "Our Work", href: "/work" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+];
+
+const legalLinks = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms of Service", href: "/terms" },
 ];
 
 export default function Footer() {
@@ -94,7 +100,7 @@ export default function Footer() {
               onMouseEnter={(e) => (e.currentTarget.style.background = "#E8B84B")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "#C9922A")}
             >
-              Get a Free Quote →
+              Book a Free Demo Call →
             </Link>
           </div>
         </div>
@@ -103,8 +109,22 @@ export default function Footer() {
           <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
             © {new Date().getFullYear()} SimplyAI Studio · San Antonio, Texas
           </p>
+          <div className="flex items-center gap-4">
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-xs transition-colors duration-200"
+                style={{ color: "rgba(255,255,255,0.25)" }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "#E8B84B")}
+                onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.25)")}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
           <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
-            Intelligent Builds for Ambitious Businesses
+            AI Voice Agents for Small Businesses
           </p>
         </div>
       </div>

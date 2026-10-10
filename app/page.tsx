@@ -3,11 +3,19 @@ import Link from "next/link";
 import Hero from "@/components/Hero";
 import TrustBar from "@/components/TrustBar";
 import ServiceCard from "@/components/ServiceCard";
+import DemoAudio from "@/components/DemoAudio";
+import { SITE_URL } from "@/lib/constants";
+
+const title = "SimplyAI Studio | AI Voice Agent Setup for Small Businesses";
+const description =
+  "We set up AI voice agents that answer every call, qualify leads, and book appointments 24/7 — so small businesses never miss another customer.";
 
 export const metadata: Metadata = {
-  title: "SimplyAI Studio | AI Voice Agent Setup for Small Businesses",
-  description:
-    "We set up AI voice agents that answer every call, qualify leads, and book appointments 24/7 — so small businesses never miss another customer.",
+  title,
+  description,
+  alternates: { canonical: SITE_URL },
+  openGraph: { title, description, url: SITE_URL },
+  twitter: { title, description },
 };
 
 const steps = [
@@ -89,6 +97,8 @@ export default function HomePage() {
 
       <TrustBar />
 
+      <DemoAudio />
+
       {/* HOW IT WORKS */}
       <section id="how-it-works" className="py-20 md:py-28 bg-white">
         <div className="max-w-6xl mx-auto px-6">
@@ -111,7 +121,7 @@ export default function HomePage() {
                 <div className="text-xs font-mono font-medium tracking-wider mb-3 text-gold">
                   {step.num}
                 </div>
-                <div className="text-3xl mb-3">{step.icon}</div>
+                <div className="text-3xl mb-3" aria-hidden="true">{step.icon}</div>
                 <h3 className="font-serif text-base font-bold mb-2 text-navy">
                   {step.title}
                 </h3>
@@ -176,13 +186,13 @@ export default function HomePage() {
               href="/contact"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-bold text-sm bg-gold hover:bg-gold-light text-navy hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(201,146,42,0.3)] transition-all duration-200"
             >
-              Get a Free Quote →
+              Book a Free Demo Call →
             </Link>
             <Link
               href="tel:2109786160"
               className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg font-medium text-sm border border-white/20 text-white/80 hover:border-gold-light hover:text-gold-light transition-all duration-200"
             >
-              📞 (210) 978-6160
+              <span aria-hidden="true">📞</span> (210) 978-6160
             </Link>
           </div>
         </div>

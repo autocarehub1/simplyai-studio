@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { waitUntil } from "@vercel/functions";
 
 const OWNER_EMAIL = "info@simplyaistudio.com";
-const CALENDLY_URL = "https://calendly.com/emmanuel_eleruja/website-consultation";
 const BREVO_API = "https://api.brevo.com/v3/smtp/email";
 
 async function sendEmail(opts: {
@@ -35,16 +34,15 @@ async function sendEmail(opts: {
   }
 }
 
-async function pushToGHL(data: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  business: string;
-  industry: string;
-  service: string;
-  message: string;
-}): Promise<void> {
+// GHL's contact-upsert accepts a combined `name` as well as firstName/
+// lastName — split is best-effort only for the parts of the API (and any
+// future email templates) that specifically want a first name.
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const parts = fullName.trim().split(/\s+/);
+  return { firstName: parts[0] || fullName, lastName: parts.slice(1).join(" ") };
+}
+
+async function pushToGHL(data: { name: string; phone: string; businessType: string }): Promise<void> {
   const apiKey = process.env.GHL_API_KEY;
   const locationId = process.env.GHL_LOCATION_ID;
   const pipelineId = process.env.GHL_PIPELINE_ID;
@@ -57,23 +55,19 @@ async function pushToGHL(data: {
     "Content-Type": "application/json",
   };
 
+  const { firstName, lastName } = splitName(data.name);
+
   // 1 — Create or update contact
   const contactRes = await fetch("https://services.leadconnectorhq.com/contacts/upsert", {
     method: "POST",
     headers,
     body: JSON.stringify({
       locationId,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
+      firstName,
+      lastName,
       phone: data.phone,
-      tags: ["website-lead", data.service.toLowerCase().replace(/\s+/g, "-")],
-      customFields: [
-        { key: "business_name", field_value: data.business },
-        { key: "industry", field_value: data.industry },
-        { key: "service_interest", field_value: data.service },
-        { key: "lead_message", field_value: data.message },
-      ],
+      tags: ["website-lead", data.businessType.toLowerCase().replace(/\s+\/\s+|\s+/g, "-")],
+      customFields: [{ key: "business_type", field_value: data.businessType }],
       source: "SimplyAI Studio Website",
     }),
   });
@@ -96,7 +90,7 @@ async function pushToGHL(data: {
       pipelineId,
       pipelineStageId: stageId,
       contactId,
-      name: `${data.firstName} ${data.lastName} — ${data.business}`,
+      name: `${data.name} — ${data.businessType}`,
       status: "open",
       source: "Website Contact Form",
     }),
@@ -115,34 +109,28 @@ async function pushToGHL(data: {
 
 export async function POST(req: NextRequest) {
   try {
-    const { firstName, lastName, phone, email, business, industry, service, message } =
-      await req.json();
+    const { name, phone, businessType } = await req.json();
 
-    console.log("[contact] submission:", { firstName, lastName, email, business, industry, service });
+    console.log("[contact] submission:", { name, phone, businessType });
 
-    if (!firstName || !lastName || !email || !business || !service) {
+    if (!name || !phone || !businessType) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Client email is the essential one — gate success on it
-    await sendEmail({
-      to: { email, name: `${firstName} ${lastName}` },
-      subject: "Book your free consultation — SimplyAI Studio",
-      html: clientEmail({ firstName, business, service }),
-    });
-
-    // Owner notification and GHL run after response — waitUntil keeps Vercel alive for them
+    // Nothing here needs to be awaited for the visitor's response — we
+    // confirm success immediately, and the owner notification + CRM push
+    // run in the background (Vercel's waitUntil keeps the function alive
+    // for them without making the visitor wait on either).
     waitUntil(
       sendEmail({
         to: { email: OWNER_EMAIL, name: "Emmanuel Eleruja" },
-        subject: `New inquiry: ${firstName} ${lastName} · ${business}`,
-        html: ownerEmail({ firstName, lastName, phone, email, business, industry, service, message }),
+        subject: `New callback request: ${name} · ${businessType}`,
+        html: ownerEmail({ name, phone, businessType }),
       }).catch((err: unknown) => console.error("[owner-email]", err))
     );
 
     waitUntil(
-      pushToGHL({ firstName, lastName, email, phone, business, industry, service, message })
-        .catch((err: unknown) => console.error("[GHL]", err))
+      pushToGHL({ name, phone, businessType }).catch((err: unknown) => console.error("[GHL]", err))
     );
 
     return NextResponse.json({ success: true });
@@ -153,87 +141,19 @@ export async function POST(req: NextRequest) {
   }
 }
 
-function clientEmail({
-  firstName,
-  business,
-  service,
+function ownerEmail({
+  name,
+  phone,
+  businessType,
 }: {
-  firstName: string;
-  business: string;
-  service: string;
-}) {
-  return `
-<!DOCTYPE html>
-<html>
-<body style="margin:0;padding:0;background:#FAF8F4;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <div style="max-width:580px;margin:40px auto;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-    <div style="background:#0D1F35;padding:28px 36px;">
-      <p style="margin:0;font-size:22px;font-weight:700;color:#ffffff;">
-        Simply<span style="color:#E8B84B;">AI</span> Studio
-      </p>
-      <p style="margin:4px 0 0;font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:0.05em;">
-        INTELLIGENT BUILDS FOR AMBITIOUS BUSINESSES
-      </p>
-    </div>
-    <div style="background:#ffffff;padding:36px;">
-      <h2 style="margin:0 0 12px;font-size:20px;color:#0D1F35;">
-        Hi ${firstName}, we got your message!
-      </h2>
-      <p style="margin:0 0 16px;font-size:15px;color:#5A6070;line-height:1.65;">
-        Thanks for reaching out about <strong style="color:#1A1F2E;">${business}</strong>.
-        We've reviewed your interest in <em>${service}</em> and we're ready to chat.
-      </p>
-      <p style="margin:0 0 28px;font-size:15px;color:#5A6070;line-height:1.65;">
-        The fastest way to move forward is to book your <strong>free 20-minute discovery call</strong>.
-        Pick any time that works for you — no pressure, just a straight conversation about your goals.
-      </p>
-      <div style="text-align:center;margin:0 0 28px;">
-        <a href="${CALENDLY_URL}"
-           style="display:inline-block;background:#C9922A;color:#0D1F35;text-decoration:none;
-                  padding:14px 36px;border-radius:8px;font-weight:700;font-size:15px;">
-          Book My Free Consultation →
-        </a>
-      </div>
-      <p style="margin:0 0 4px;font-size:12px;color:#9AA0B0;text-align:center;">Or copy this link:</p>
-      <p style="margin:0;font-size:12px;text-align:center;">
-        <a href="${CALENDLY_URL}" style="color:#C9922A;">${CALENDLY_URL}</a>
-      </p>
-      <hr style="border:none;border-top:1px solid #E8EAF0;margin:28px 0;" />
-      <p style="margin:0;font-size:13px;color:#5A6070;line-height:1.6;">
-        Questions? Call us at
-        <a href="tel:2109786160" style="color:#C9922A;text-decoration:none;">(210) 978-6160</a>
-        or reply to this email.
-      </p>
-    </div>
-    <div style="background:#F4F5F7;padding:18px 36px;text-align:center;">
-      <p style="margin:0;font-size:12px;color:#9AA0B0;">
-        SimplyAI Studio · San Antonio, Texas ·
-        <a href="mailto:info@simplyaistudio.com" style="color:#C9922A;text-decoration:none;">info@simplyaistudio.com</a>
-      </p>
-    </div>
-  </div>
-</body>
-</html>`;
-}
-
-function ownerEmail(data: {
-  firstName: string;
-  lastName: string;
+  name: string;
   phone: string;
-  email: string;
-  business: string;
-  industry: string;
-  service: string;
-  message: string;
+  businessType: string;
 }) {
   const rows: [string, string][] = [
-    ["Name", `${data.firstName} ${data.lastName}`],
-    ["Email", data.email],
-    ["Phone", data.phone],
-    ["Business", data.business],
-    ["Industry", data.industry],
-    ["Service", data.service],
-    ["Message", data.message || "—"],
+    ["Name", name],
+    ["Phone", phone],
+    ["Business Type", businessType],
   ];
 
   return `
@@ -244,12 +164,12 @@ function ownerEmail(data: {
               overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.07);">
     <div style="background:#0D1F35;padding:20px 28px;">
       <p style="margin:0;font-size:14px;font-weight:700;color:#E8B84B;letter-spacing:0.06em;text-transform:uppercase;">
-        New Inquiry — SimplyAI Studio
+        New Callback Request — SimplyAI Studio
       </p>
     </div>
     <div style="padding:28px;">
       <h2 style="margin:0 0 20px;font-size:18px;color:#0D1F35;">
-        ${data.firstName} ${data.lastName} · ${data.business}
+        ${name} · ${businessType}
       </h2>
       <table style="width:100%;border-collapse:collapse;">
         ${rows
@@ -267,7 +187,7 @@ function ownerEmail(data: {
       <div style="margin-top:20px;padding:14px;background:#FDF3E0;border-radius:8px;
                   border-left:3px solid #C9922A;">
         <p style="margin:0;font-size:13px;color:#5A6070;">
-          A Calendly booking link has been sent to <strong>${data.email}</strong>.
+          No email was collected — call or text <strong>${phone}</strong> to follow up.
         </p>
       </div>
     </div>

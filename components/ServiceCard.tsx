@@ -45,7 +45,7 @@ export default function ServiceCard({
         el.style.boxShadow = "none";
       }}
     >
-      <div className="text-3xl">{icon}</div>
+      <div className="text-3xl" aria-hidden="true">{icon}</div>
 
       <div>
         <h3
